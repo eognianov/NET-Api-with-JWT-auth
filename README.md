@@ -1,1 +1,1 @@
-# .NET-Api-with-JWT-auth
+# NET-Api-with-JWT-auth
