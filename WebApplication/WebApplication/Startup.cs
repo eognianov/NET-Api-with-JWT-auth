@@ -40,7 +40,7 @@ namespace WebApplication
 
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo {Title = "My API", Version = "v1"});
+                x.SwaggerDoc("v1", new OpenApiInfo {Title = "Tweetbook API", Version = "v1"});
             });
         }
 
