@@ -14,5 +14,8 @@ namespace WebApplication.Services
         void Add(Post post);
 
         bool Update(Post postToUpdate);
+        
+        bool Delete(Guid postId);
+        
     }
 }

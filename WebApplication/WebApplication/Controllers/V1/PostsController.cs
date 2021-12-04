@@ -73,5 +73,16 @@ namespace WebApplication.Controllers.V1
 
             return NotFound();
         }
+
+        [HttpDelete(ApiRoutes.Posts.Delete)]
+        public IActionResult Delete([FromRoute] Guid postId)
+        {
+            if (_postService.Delete(postId))
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
     }
 }
