@@ -32,5 +32,18 @@ namespace WebApplication.Services
         {
             _posts.Add(post);
         }
+
+        public bool Update(Post postToUpdate)
+        {
+            var exists = GetPostById(postToUpdate.Id) != null;
+            if (!exists)
+            {
+                return false;
+            }
+
+            var index = _posts.FindIndex(p => p.Id == postToUpdate.Id);
+            _posts[index] = postToUpdate;
+            return true;
+        }
     }
 }

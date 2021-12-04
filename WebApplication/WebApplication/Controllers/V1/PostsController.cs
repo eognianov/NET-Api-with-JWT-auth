@@ -35,7 +35,9 @@ namespace WebApplication.Controllers.V1
                 return NotFound();
             }
 
-            return Ok(result);
+            var model = new PostViewModel {Id = result.Id, Name = result.Name};
+
+            return Ok(model);
         }
 
         [HttpPost(ApiRoutes.Posts.Create)]
@@ -56,6 +58,20 @@ namespace WebApplication.Controllers.V1
             var postViewModel = new PostViewModel {Id = post.Id};
             return Created(locationUri, postViewModel);
         }
-        
+
+        [HttpPut(ApiRoutes.Posts.Update)]
+        public IActionResult Update([FromRoute] Guid postId,[FromBody] UpdatePostInputModel postToUpdate)
+        {
+            var post = new Post {Id = postId, Name = postToUpdate.Name};
+
+            var updated = _postService.Update(post);
+            if (updated)
+            {
+                var model = new PostViewModel {Id = postId, Name = postToUpdate.Name};
+                return Ok(model);
+            }
+
+            return NotFound();
+        }
     }
 }

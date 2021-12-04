@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Contracts.V1.InputModels;
 using WebApplication.Domain;
 
 namespace WebApplication.Services
@@ -11,5 +12,7 @@ namespace WebApplication.Services
         Post GetPostById(Guid id);
 
         void Add(Post post);
+
+        bool Update(Post postToUpdate);
     }
 }
