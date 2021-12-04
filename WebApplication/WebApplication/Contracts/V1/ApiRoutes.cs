@@ -7,7 +7,7 @@ namespace WebApplication.Contracts.V1
         private const string Base = Root + "/" + Version;
         public static class Posts
         {
-            public const string Get = Base + "/posts/{id}";
+            public const string Get = Base + "/posts/{postId}";
             public const string GetAll = Base + "/posts";
             public const string Create = Base + "/posts";
             

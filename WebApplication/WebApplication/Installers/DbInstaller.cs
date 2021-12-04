@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication.Data;
+using WebApplication.Services;
 
 namespace WebApplication.Installers
 {
@@ -15,7 +16,9 @@ namespace WebApplication.Installers
                     configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<DataContext>();  
+                .AddEntityFrameworkStores<DataContext>();
+
+            services.AddSingleton<IPostService, PostService>();
         }
     }
 }
