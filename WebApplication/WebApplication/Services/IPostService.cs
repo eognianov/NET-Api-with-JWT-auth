@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Contracts.V1.InputModels;
 using WebApplication.Domain;
@@ -8,14 +9,14 @@ namespace WebApplication.Services
 {
     public interface IPostService
     {
-        List<Post> GetPosts();
-        Post GetPostById(Guid id);
+        Task<List<Post>> GetPostsAsync();
+        Task<Post> GetPostByIdAsync(Guid id);
 
-        void Add(Post post);
+        Task<bool> CreatePostAsync(Post post);
 
-        bool Update(Post postToUpdate);
+        Task<bool> UpdatePostAsync(Post postToUpdate);
         
-        bool Delete(Guid postId);
+        Task<bool> DeletePostAsync(Guid postId);
         
     }
 }

@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Contracts;
 using WebApplication.Contracts.V1;
 using WebApplication.Contracts.V1.InputModels;
 using WebApplication.Contracts.V1.ViewModels;
@@ -21,15 +19,15 @@ namespace WebApplication.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_postService.GetPosts());
+            return Ok(await _postService.GetPostsAsync());
         }
         
         [HttpGet(ApiRoutes.Posts.Get)]
-        public IActionResult Get([FromRoute] Guid postId)
+        public async Task<IActionResult> Get([FromRoute] Guid postId)
         {
-            var result = _postService.GetPostById(postId);
+            var result = await _postService.GetPostByIdAsync(postId);
             if (result == null)
             {
                 return NotFound();
@@ -41,30 +39,31 @@ namespace WebApplication.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.Posts.Create)]
-        public IActionResult Create([FromBody] PostInputModel postRequest)
+        public async Task<IActionResult> Create([FromBody] PostInputModel postRequest)
         {
-            var post = new Post {Id = postRequest.Id};
-            
-            if (post.Id != Guid.Empty)
+
+            var post = new Post {Name = postRequest.Name};
+
+            var added = await _postService.CreatePostAsync(post);
+
+            if (!added)
             {
-                post.Id = Guid.NewGuid();
+                return BadRequest();
             }
             
-            _postService.Add(post);
-
             // var location = ApiRoutes.Posts.getPostRoute(post.Id);
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var locationUri = baseUrl + "/" + ApiRoutes.Posts.Get.Replace("{id}", post.Id.ToString());
-            var postViewModel = new PostViewModel {Id = post.Id};
+            var locationUri = baseUrl + "/" + ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString());
+            var postViewModel = new PostViewModel {Id = post.Id, Name = post.Name};
             return Created(locationUri, postViewModel);
         }
 
         [HttpPut(ApiRoutes.Posts.Update)]
-        public IActionResult Update([FromRoute] Guid postId,[FromBody] UpdatePostInputModel postToUpdate)
+        public async Task<IActionResult> Update([FromRoute] Guid postId,[FromBody] UpdatePostInputModel postToUpdate)
         {
             var post = new Post {Id = postId, Name = postToUpdate.Name};
 
-            var updated = _postService.Update(post);
+            var updated = await _postService.UpdatePostAsync(post);
             if (updated)
             {
                 var model = new PostViewModel {Id = postId, Name = postToUpdate.Name};
@@ -75,9 +74,9 @@ namespace WebApplication.Controllers.V1
         }
 
         [HttpDelete(ApiRoutes.Posts.Delete)]
-        public IActionResult Delete([FromRoute] Guid postId)
+        public async Task<IActionResult> Delete([FromRoute] Guid postId)
         {
-            if (_postService.Delete(postId))
+            if (await _postService.DeletePostAsync(postId))
             {
                 return NoContent();
             }
