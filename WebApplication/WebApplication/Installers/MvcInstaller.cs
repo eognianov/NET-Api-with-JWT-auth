@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebApplication.Options;
+using WebApplication.Services;
 
 namespace WebApplication.Installers
 {
@@ -16,6 +17,7 @@ namespace WebApplication.Installers
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(jwtSettings), jwtSettings);
             services.AddSingleton(jwtSettings);
+            services.AddScoped<IIdentityService, IdentityService>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             
             services.AddControllersWithViews();

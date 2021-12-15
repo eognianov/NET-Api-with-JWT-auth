@@ -18,5 +18,11 @@ namespace WebApplication.Contracts.V1
                 return Base + "/posts/" + postId;
             }
         }
+
+        public static class Identity
+        {
+            public const string Login = Base + "/identity/login";
+            public const string Register = Base + "/identity/register";
+        }
     }
 }
