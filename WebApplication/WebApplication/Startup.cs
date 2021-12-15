@@ -44,6 +44,11 @@ namespace WebApplication
             {
                 app.UseHsts();
             }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            // Authentication
+            app.UseAuthentication();
 
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
@@ -56,9 +61,6 @@ namespace WebApplication
             {
                 options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
             });
-            
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
             
