@@ -52,5 +52,17 @@ namespace WebApplication.Services
             var deleted = await _dataContext.SaveChangesAsync();
             return deleted > 0;
         }
+
+        public async Task<bool> UserOwnsPostAsync(Guid postId, string userId)
+        {
+            var post = _dataContext.Posts.AsNoTracking().SingleOrDefault(x => x.Id == postId);
+            if (post == null)
+            {
+                return false;
+            }
+
+            return post.UserId == userId;
+            
+        }
     }
 }

@@ -7,6 +7,7 @@ using WebApplication.Contracts.V1;
 using WebApplication.Contracts.V1.InputModels;
 using WebApplication.Contracts.V1.ViewModels;
 using WebApplication.Domain;
+using WebApplication.Extensions;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers.V1
@@ -45,7 +46,11 @@ namespace WebApplication.Controllers.V1
         public async Task<IActionResult> Create([FromBody] PostInputModel postRequest)
         {
 
-            var post = new Post {Name = postRequest.Name};
+            var post = new Post
+            {
+                Name = postRequest.Name,
+                UserId = HttpContext.GetUserId()
+            };
 
             var added = await _postService.CreatePostAsync(post);
 
@@ -64,7 +69,16 @@ namespace WebApplication.Controllers.V1
         [HttpPut(ApiRoutes.Posts.Update)]
         public async Task<IActionResult> Update([FromRoute] Guid postId,[FromBody] UpdatePostInputModel postToUpdate)
         {
-            var post = new Post {Id = postId, Name = postToUpdate.Name};
+            var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
+
+            if (!userOwnsPost)
+            {
+                return BadRequest(new {error = "You do not own this post"});
+            }
+
+            var post = await _postService.GetPostByIdAsync(postId);
+
+            post.Name = postToUpdate.Name;
 
             var updated = await _postService.UpdatePostAsync(post);
             if (updated)
@@ -79,6 +93,13 @@ namespace WebApplication.Controllers.V1
         [HttpDelete(ApiRoutes.Posts.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid postId)
         {
+            var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
+
+            if (!userOwnsPost)
+            {
+                return BadRequest(new {error = "You do not own this post"});
+            }
+            
             if (await _postService.DeletePostAsync(postId))
             {
                 return NoContent();
