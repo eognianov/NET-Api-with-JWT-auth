@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,8 +20,12 @@ namespace WebApplication.Installers
             services.AddSingleton(jwtSettings);
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            
-            services.AddControllersWithViews();
+
+            services.AddMvc(options =>
+            {
+                options.EnableEndpointRouting = false;
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+            // services.AddControllersWithViews();
             
             // Authentication
             var tokenValidationParameters = new TokenValidationParameters

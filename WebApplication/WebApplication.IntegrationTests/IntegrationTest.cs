@@ -14,9 +14,10 @@ using WebApplication.Data;
 
 namespace WebApplication.IntegrationTests
 {
-    public class IntegrationTest
+    public class IntegrationTest : IDisposable
     {
         protected readonly HttpClient TestClient;
+        protected readonly IServiceProvider _serviceProvider;
         
         public IntegrationTest()
         {
@@ -32,6 +33,7 @@ namespace WebApplication.IntegrationTests
                         });
                     });
                 });
+            _serviceProvider = appFactory.Services;
             TestClient = appFactory.CreateClient();
         }
 
@@ -44,7 +46,7 @@ namespace WebApplication.IntegrationTests
         {
             var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new UserRegistrationRequestInputModel
             {
-                Email = "emo@sap.com",
+                Email = "emotest@sap.com",
                 Password = "Test123!"
             });
 
@@ -55,6 +57,15 @@ namespace WebApplication.IntegrationTests
             }
 
             return registrationResponse.Token;
+        }
+
+        public void Dispose()
+        {
+            using (var serviceScope = _serviceProvider.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<DataContext>();
+                context?.Database.EnsureDeleted();
+            }
         }
     }
 }

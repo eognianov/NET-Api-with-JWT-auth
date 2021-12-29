@@ -18,11 +18,11 @@ namespace WebApplication
         {
             var host = CreateHostBuilder(args).Build();
             // Migrate on Startup
-            // using (var serviceScope = host.Services.CreateScope())
-            // {
-            //     var dbContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
-            //     await dbContext.Database.MigrateAsync();
-            // }
+            using (var serviceScope = host.Services.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
+                await dbContext.Database.MigrateAsync();
+            }
             await host.RunAsync();
         }
 
