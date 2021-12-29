@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{92010A13-09C1-4E4C-BB28-34721406B402}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication.IntegrationTests", "WebApplication.IntegrationTests\WebApplication.IntegrationTests.csproj", "{E6A0E7DC-DB9B-41E2-84C5-7753B0C1CB77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{92010A13-09C1-4E4C-BB28-34721406B402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92010A13-09C1-4E4C-BB28-34721406B402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92010A13-09C1-4E4C-BB28-34721406B402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A0E7DC-DB9B-41E2-84C5-7753B0C1CB77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A0E7DC-DB9B-41E2-84C5-7753B0C1CB77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A0E7DC-DB9B-41E2-84C5-7753B0C1CB77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A0E7DC-DB9B-41E2-84C5-7753B0C1CB77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
