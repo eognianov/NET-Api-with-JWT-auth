@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -39,8 +40,10 @@ namespace WebApplication.Services
                 };
             }
 
+            var newUserId = Guid.NewGuid();
             var newUser = new IdentityUser
             {
+                Id = newUserId.ToString(),
                 Email = email,
                 UserName = email
             };
@@ -54,7 +57,9 @@ namespace WebApplication.Services
                     Errors = createdUser.Errors.Select(x=>x.Description).ToArray()
                 };
             }
-
+            
+            await _userManager.AddClaimAsync(newUser, new Claim("tags.view", "true"));
+            
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
         
@@ -189,15 +194,21 @@ namespace WebApplication.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("id", user.Id),
+            };
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            
+            claims.AddRange(userClaims);
+            
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("id", user.Id),
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
                 SigningCredentials =
                     new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

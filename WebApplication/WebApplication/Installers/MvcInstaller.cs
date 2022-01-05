@@ -51,6 +51,11 @@ namespace WebApplication.Installers
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
+            services.AddAuthorization(optinons =>
+            {
+                optinons.AddPolicy("TagViewer", builder=>builder.RequireClaim("tags.view", "true"));
+            });
+
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo {Title = "Tweetbook API", Version = "v1"});

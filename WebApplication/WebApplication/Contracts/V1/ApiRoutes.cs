@@ -25,5 +25,10 @@ namespace WebApplication.Contracts.V1
             public const string Register = Base + "/identity/register";
             public const string Refresh = Base + "/identity/refresh";
         }
+        
+        public static class Tags
+        {
+            public const string GetAll = Base + "/tags/all";
+        }
     }
 }
