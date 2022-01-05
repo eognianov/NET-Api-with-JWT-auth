@@ -24,7 +24,7 @@ namespace WebApplication.Installers
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
-            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+            });
             // services.AddControllersWithViews();
             
             // Authentication
