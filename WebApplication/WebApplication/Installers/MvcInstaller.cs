@@ -51,9 +51,9 @@ namespace WebApplication.Installers
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
-            services.AddAuthorization(optinons =>
+            services.AddAuthorization(options =>
             {
-                optinons.AddPolicy("TagViewer", builder=>builder.RequireClaim("tags.view", "true"));
+                options.AddPolicy("TagViewer", builder=>builder.RequireClaim("tags.view", "true"));
             });
 
             services.AddSwaggerGen(x =>

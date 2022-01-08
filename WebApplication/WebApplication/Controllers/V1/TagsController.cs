@@ -7,7 +7,7 @@ using WebApplication.Services;
 
 namespace WebApplication.Controllers.V1;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, Poster")]
 public class TagsController: Controller
 {
     private readonly IPostService _postService;
@@ -18,7 +18,8 @@ public class TagsController: Controller
     }
 
     [HttpGet(ApiRoutes.Tags.GetAll)]
-    [Authorize(Policy = "TagViewer")]
+    // [Authorize(Policy = "TagViewer")]
+    [Authorize(Roles = "Admin, Poster")]
     public async Task<IActionResult> GetAll()
     {
         return Ok(new []{"tag1", "tag2"});
